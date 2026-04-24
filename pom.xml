@@ -1,10 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0">
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- SPRING BOOT -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -18,7 +16,7 @@
 
     <packaging>pom</packaging>
 
-    <!-- ADD THIS (FOR SPRING CLOUD) -->
+    <!-- SPRING CLOUD -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -31,11 +29,12 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- modules -->
+    <!-- MODULES -->
     <modules>
         <module>service/user-service</module>
         <module>service/product-service</module>
         <module>service/cart-service</module>
+        <module>service/order-service</module>
         <module>eureka-server</module>
         <module>api-gateway</module>
     </modules>
