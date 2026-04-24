@@ -22,7 +22,7 @@ public class OrderService {
         Orders saved = repo.save(order);
 
         // 2. Send event to Kafka (async communication)
-        producer.sendOrderEvent("Order placed: " + saved.getId());
+//        producer.sendOrderEvent("Order placed: " + saved.getId());
 
         return saved;
     }

@@ -2,10 +2,7 @@ package com.bookstore.order_service.controller;
 
 import com.bookstore.order_service.entity.Orders;
 import com.bookstore.order_service.service.OrderService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/orders")
@@ -15,6 +12,11 @@ public class OrderController {
 
     public OrderController(OrderService service) {
         this.service = service;
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "working";
     }
 
     @PostMapping
