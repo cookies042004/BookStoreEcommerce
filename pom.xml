@@ -31,13 +31,7 @@
 
     <!-- MODULES -->
     <modules>
-        <module>service/user-service</module>
-        <module>service/product-service</module>
-        <module>service/cart-service</module>
-        <module>service/order-service</module>
-        <module>service/notification-service</module>
         <module>eureka-server</module>
-        <module>api-gateway</module>
     </modules>
 
 </project>
