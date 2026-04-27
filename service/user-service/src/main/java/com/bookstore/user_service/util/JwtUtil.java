@@ -1,36 +1,44 @@
-package     com.bookstore.user_service.util;
+package com.bookstore.user_service.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
 
-    private static final String SECRET = "mysecretkeymysecretkeymysecretkey";
+    private final String secret;
+    private final long expiration;
+    private final Key key;
 
-    private static final long EXPIRATION = 1000 * 60 * 60; // 1 hour
-
-    private static final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    public JwtUtil(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration}") long expiration
+    ) {
+        this.secret = secret;
+        this.expiration = expiration;
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     // Generate Token
-    public static String generateToken(String username, String role) {
-        System.out.println("SECRET (User Service): " + SECRET);
-        String token =  Jwts.builder()
+    public String generateToken(String username, String role) {
+
+        return Jwts.builder()
                 .setSubject(username)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-        System.out.println("Generated Token: " + token);
-
-        return token;
     }
 
     // Validate Token
-    public static String extractUsername(String token) {
+    public String extractUsername(String token) {
+
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
