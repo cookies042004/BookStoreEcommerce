@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  # ===============================
+  # 🔹 Zookeeper Service
+  # ===============================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0   # Official Zookeeper image
+    container_name: zookeeper
+    ports:
+      - "2181:2181"                          # Default Zookeeper port
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181            # Port for Kafka to connect
+
+  # ===============================
+  # 🔹 Kafka Broker
+  # ===============================
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0       # Kafka image
+    container_name: kafka
+    ports:
+      - "9092:9092"                          # Kafka exposed port
+    depends_on:
+      - zookeeper                            # Start Zookeeper first
+    environment:
+      KAFKA_BROKER_ID: 1
+
+      # Connect Kafka to Zookeeper
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+      # Address where clients will connect
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+
+      # Single broker setup (no replication)
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
