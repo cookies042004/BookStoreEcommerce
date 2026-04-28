@@ -33,6 +33,12 @@
     <modules>
         <module>api-gateway</module>
         <module>eureka-server</module>
+        <module>service/notification-service</module>
+        <module>service/order-service</module>
+        <module>service/cart-service</module>
+        <module>service/product-service</module>
+        <module>service/user-service</module>
+        <module>service/customer-service</module>
     </modules>
 
 </project>

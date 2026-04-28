@@ -84,3 +84,10 @@ services:
 
   notification-service:
     build: ../service/notification-service  # Build notification microservice
+
+  customer-service:
+    build: ../service/customer-service
+    ports:
+      - "8086:8086"
+    depends_on:
+      - postgres
