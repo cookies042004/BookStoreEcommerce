@@ -1,0 +1,86 @@
+version: '3.8'  # Docker Compose version
+
+services:
+
+  postgres:
+    image: postgres:15  # PostgreSQL database image
+    container_name: postgres  # Container name
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}  # DB username from .env
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # DB password from .env
+      POSTGRES_DB: ${POSTGRES_DB}  # Default database name
+    ports:
+      - "5432:5432"  # Expose Postgres port
+
+  redis:
+    image: redis:7  # Redis cache image
+    container_name: redis  # Container name
+    ports:
+      - "6379:6379"  # Expose Redis port
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0  # Zookeeper for Kafka
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181  # Zookeeper port
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0  # Kafka broker image
+    depends_on:
+      - zookeeper  # Kafka depends on Zookeeper
+    ports:
+      - "9092:9092"  # Kafka exposed port
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181  # Zookeeper connection
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092  # Kafka listener config
+
+  config-server:
+    build: ../config-server  # Build from local config-server project
+    ports:
+      - "8888:8888"  # Config server port
+    env_file:
+      - .env  # Load environment variables
+
+  eureka-server:
+    build: ../eureka-server  # Build Eureka service registry
+    ports:
+      - "8761:8761"  # Eureka dashboard port
+    depends_on:
+      - config-server  # Depends on config server
+
+  api-gateway:
+    build: ../api-gateway  # Build API Gateway
+    ports:
+      - "8082:8082"  # Gateway port
+    depends_on:
+      - eureka-server  # Depends on Eureka
+
+  user-service:
+    build: ../service/user-service  # Build user microservice
+    ports:
+      - "8081:8081"  # User service port
+    depends_on:
+      - postgres  # Needs database
+      - eureka-server  # Needs service registry
+      - config-server  # Needs config server
+
+  product-service:
+    build: ../service/product-service  # Build product microservice
+    ports:
+      - "8083:8083"  # Product service port
+
+  cart-service:
+    build: ../service/cart-service  # Build cart microservice
+    ports:
+      - "8084:8084"  # Cart service port
+    depends_on:
+      - redis  # Uses Redis for caching
+
+  order-service:
+    build: ../service/order-service  # Build order microservice
+    ports:
+      - "8085:8085"  # Order service port
+    depends_on:
+      - kafka  # Uses Kafka for messaging
+
+  notification-service:
+    build: ../service/notification-service  # Build notification microservice
