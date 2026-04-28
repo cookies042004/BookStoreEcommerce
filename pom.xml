@@ -39,6 +39,7 @@
         <module>service/product-service</module>
         <module>service/user-service</module>
         <module>service/customer-service</module>
+        <module>service/wishlist-service</module>
     </modules>
 
 </project>

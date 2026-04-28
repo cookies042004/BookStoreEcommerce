@@ -91,3 +91,11 @@ services:
       - "8086:8086"
     depends_on:
       - postgres
+
+  wishlist-service:
+    build: ../service/wishlist-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      - postgres
+      - eureka-server
