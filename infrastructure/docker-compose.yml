@@ -99,3 +99,11 @@ services:
     depends_on:
       - postgres
       - eureka-server
+
+  admin-service:
+    build: ../service/admin-service
+    ports:
+      - "8088:8088"
+    depends_on:
+      - postgres
+      - eureka-server

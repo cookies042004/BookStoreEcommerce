@@ -40,6 +40,7 @@
         <module>service/user-service</module>
         <module>service/customer-service</module>
         <module>service/wishlist-service</module>
+        <module>service/admin-service</module>
     </modules>
 
 </project>
