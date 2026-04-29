@@ -1,10 +1,10 @@
 package com.bookstore.user_service.service;
 
-import com.bookstore.user_service.dto.UserRequest;
-import com.bookstore.user_service.dto.UserResponse;
+import com.bookstore.user_service.dto.*;
 import com.bookstore.user_service.model.User;
 import com.bookstore.user_service.exception.UserNotFoundException;
 import com.bookstore.user_service.repository.UserRepository;
+import com.bookstore.user_service.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,15 @@ public class UserService {
 
     public UserResponse createUser(UserRequest request) {
 
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already registered");
+        }
 
-        // hash password
+        User user = new User();
+        user.setUsername(request.getName());
+        user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole("USER");
 
         User saved = repository.save(user);
 
@@ -33,35 +36,29 @@ public class UserService {
     }
 
     public UserResponse getUserById(Long id) {
-
         User user = repository.findById(id)
-                .orElseThrow(() ->
-                        new UserNotFoundException("User with id " + id + " not found")
-                );
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return mapToResponse(user);
     }
 
     public List<UserResponse> getAllUsers() {
-        return repository.findAll()
-                .stream()
+        return repository.findAll().stream()
                 .map(this::mapToResponse)
                 .toList();
     }
 
     public void deleteUser(Long id) {
-
         if (!repository.existsById(id)) {
             throw new UserNotFoundException("User not found");
         }
-
         repository.deleteById(id);
     }
 
     private UserResponse mapToResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
-                .name(user.getName())
+                .name(user.getUsername())
                 .email(user.getEmail())
                 .build();
     }

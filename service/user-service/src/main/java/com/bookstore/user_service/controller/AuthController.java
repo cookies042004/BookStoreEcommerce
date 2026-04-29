@@ -1,6 +1,7 @@
 package com.bookstore.user_service.controller;
 
-import com.bookstore.user_service.util.JwtUtil;
+import com.bookstore.user_service.dto.*;
+import com.bookstore.user_service.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,17 +10,15 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final JwtUtil jwtUtil;
+    private final AuthService service;
+
+    @PostMapping("/register")
+    public String register(@RequestBody RegisterRequest request) {
+        return service.register(request);
+    }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username) {
-
-        String role = "USER";
-
-        if ("admin".equals(username)) {
-            role = "ADMIN";
-        }
-
-        return jwtUtil.generateToken(username, role);
+    public AuthResponse login(@RequestBody LoginRequest request) {
+        return service.login(request);
     }
 }

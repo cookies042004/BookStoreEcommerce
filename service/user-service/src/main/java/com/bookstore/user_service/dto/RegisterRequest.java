@@ -3,9 +3,8 @@ package com.bookstore.user_service.dto;
 import lombok.Data;
 
 @Data
-public class UserRequest {
-
-    private String name;
+public class RegisterRequest {
+    private String username;
     private String email;
     private String password;
 }
