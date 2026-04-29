@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.2.5</version>
         <relativePath/>
     </parent>
 
@@ -22,7 +22,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2024.0.1</version>
+                <version>2023.0.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -31,12 +31,17 @@
 
     <!-- MODULES -->
     <modules>
-        <module>service/user-service</module>
-        <module>service/product-service</module>
-        <module>service/cart-service</module>
-        <module>service/order-service</module>
-        <module>eureka-server</module>
         <module>api-gateway</module>
+        <module>eureka-server</module>
+        <module>service/notification-service</module>
+        <module>service/order-service</module>
+        <module>service/cart-service</module>
+        <module>service/product-service</module>
+        <module>service/user-service</module>
+        <module>service/customer-service</module>
+        <module>service/wishlist-service</module>
+        <module>service/admin-service</module>
+        <module>service/user-service</module>
     </modules>
 
 </project>
